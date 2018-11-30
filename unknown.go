@@ -5,9 +5,9 @@ import (
 	status "google.golang.org/grpc/status"
 )
 
-// UnknownError. An example of where this error may be returned is
-// if a Status value received from another address space belongs to
-// an error-space that is not known in this address space.
+// UnknownError is an unknown server error. An example of where this error may
+// be returned is if a Status value received from another address space belongs
+// to an error-space that is not known in this address space.
 //
 // Since the client cannot fix this server error, it is not useful to generate
 // additional error details. To avoid leaking sensitive information under error
@@ -67,7 +67,7 @@ func (e *UnknownError) GetCause() error { return e.cause }
 // GetStack returns the trace stack associated with this error.
 func (e *UnknownError) GetStack() stack { return e.stack }
 
-// GRPCStatus impliments an interface required to return proper GRPC status codes
+// GRPCStatus implements an interface required to return proper GRPC status codes
 func (e *UnknownError) GRPCStatus() *status.Status {
 	return status.New(e.rpcCode, e.Message)
 }

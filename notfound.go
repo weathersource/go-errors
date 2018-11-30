@@ -59,7 +59,7 @@ func (e *NotFoundError) GetCause() error { return e.cause }
 // GetStack returns the trace stack associated with this error.
 func (e *NotFoundError) GetStack() stack { return e.stack }
 
-// GRPCStatus impliments an interface required to return proper GRPC status codes
+// GRPCStatus implements an interface required to return proper GRPC status codes
 func (e *NotFoundError) GRPCStatus() *status.Status {
 	return status.New(e.rpcCode, e.Message)
 }

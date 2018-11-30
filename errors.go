@@ -8,7 +8,7 @@ import (
 // Errors is a container for multiple errors and implements the error interface
 type Errors []error
 
-// New returns an error that consists of multiple errors.
+// NewErrors returns an error that consists of multiple errors.
 func NewErrors(errs ...error) Errors {
 	return Errors(errs)
 }
