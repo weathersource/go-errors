@@ -9,6 +9,14 @@ import (
 // be returned is if a Status value received from another address space belongs
 // to an error-space that is not known in this address space.
 //
+// A litmus test that may help a service implementor in deciding between
+// UnknownError and InternalError:
+//
+//  (a) Use UnknownError for generic server-side errors that may be recoverable
+//      (UnknownError.Temporary() will return true).
+//  (b) Use InternalError for generic server-side errors that are not recoverable
+//      (InternalError.Temporary() will return false).
+//
 // Since the client cannot fix this server error, it is not useful to generate
 // additional error details. To avoid leaking sensitive information under error
 // conditions, only a generic error Message is marshalled to JSON or returned
