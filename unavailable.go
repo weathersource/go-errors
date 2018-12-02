@@ -10,20 +10,16 @@ import (
 // by retrying with a backoff.
 //
 // A litmus test that may help a service implementor in deciding
-// between FailedPreconditionError, AbortedError, and UnavailableError:
+// between ResourceExhaustedError, UnavailableError, and AbortedError:
 //
-//  (a) Use UnavailableError if the client can retry just the failing call.
-//  (b) Use AbortedError if the client should retry at a higher-level
+//  (a) Use ResourceExhaustedError for client errors like exceeding allowed
+//      rate limits. The client may retry the failing call after they have
+//      resolved the causal issue.
+//  (b) Use UnavailableError for server errors like inability to accomodate
+//      current load or planned server maintenance. The client may retry the
+//      failing call.
+//  (c) Use AbortedError if the client should retry at a higher-level
 //      (e.g., restarting a read-modify-write sequence).
-//  (c) Use FailedPreconditionError if the client should not retry until
-//      the system state has been explicitly fixed. E.g., if an "rmdir"
-//      fails because the directory is non-empty, FailedPreconditionError
-//      should be returned since the client should not retry unless
-//      they have first fixed up the directory by deleting files from it.
-//  (d) Use FailedPreconditionError if the client performs conditional
-//      REST Get/Update/Delete on a resource and the resource on the
-//      server does not match the condition. E.g., conflicting
-//      read-modify-write on the same resource.
 //
 // Since the client cannot fix this server error, it is not useful to generate
 // additional error details. To avoid leaking sensitive information under error

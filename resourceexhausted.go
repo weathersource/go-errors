@@ -8,6 +8,18 @@ import (
 // ResourceExhaustedError indicates some resource has been exhausted, perhaps
 // a per-user quota, or perhaps the entire file system is out of space.
 //
+// A litmus test that may help a service implementor in deciding
+// between ResourceExhaustedError, UnavailableError, and AbortedError:
+//
+//  (a) Use ResourceExhaustedError for client errors like exceeding allowed
+//      rate limits. The client may retry the failing call after they have
+//      resolved the causal issue.
+//  (b) Use UnavailableError for server errors like inability to accomodate
+//      current load or planned server maintenance. The client may retry the
+//      failing call.
+//  (c) Use AbortedError if the client should retry at a higher-level
+//      (e.g., restarting a read-modify-write sequence).
+//
 // Example error Message:
 //
 //		RESOURCE EXHAUSTED. Quota limit 'xxx' exceeded.
