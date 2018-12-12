@@ -30,7 +30,7 @@ import (
 //
 // RPC Mapping: UNKNOWN
 type UnknownError struct {
-	Code       int    `json:"error_code"`
+	Code       int    `json:"errorCode"`
 	Message    string `json:"error_message"`
 	logMessage string
 	cause      error
