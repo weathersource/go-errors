@@ -20,8 +20,8 @@ import (
 //
 // RPC Mapping: DATA_LOSS
 type DataLossError struct {
-	Code       int    `json:"error_code"`
-	Message    string `json:"error_message"`
+	Code       int    `json:"errorCode"`
+	Message    string `json:"errorMessage"`
 	logMessage string
 	cause      error
 	stack      stack

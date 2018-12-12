@@ -19,8 +19,8 @@ import (
 //
 // RPC Mapping: PERMISSION_DENIED
 type PermissionDeniedError struct {
-	Code    int    `json:"error_code"`
-	Message string `json:"error_message"`
+	Code    int    `json:"errorCode"`
+	Message string `json:"errorMessage"`
 	cause   error
 	stack   stack
 	rpcCode codes.Code
