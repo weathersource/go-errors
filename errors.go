@@ -30,3 +30,23 @@ func (e Errors) Error() string {
 
 	return fmt.Sprintf("Errors:\n%s", strings.Join(logWithNumber, "\n"))
 }
+
+// Pop removes and returns the last error from Errors
+func (e Errors) Pop() error {
+	if e != nil && len(e) > 0 {
+		err := e[len(e)-1]
+		e = e[:len(e)-1]
+		return err
+	}
+	return nil
+}
+
+// Shift removes and returns the first error from Errors
+func (e Errors) Shift() error {
+	if e != nil && len(e) > 0 {
+		err := e[0]
+		e = e[1:]
+		return err
+	}
+	return nil
+}
