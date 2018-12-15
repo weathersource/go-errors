@@ -70,6 +70,34 @@ func TestErrorsShift(t *testing.T) {
 	}
 }
 
+func TestErrorsAppend(t *testing.T) {
+	tests := []struct {
+		errs *Errors
+		err  error
+		cnt  int
+	}{
+		{
+			NewErrors(),
+			nil,
+			0,
+		},
+		{
+			NewErrors(errors.New("foo")),
+			errors.New("bar"),
+			2,
+		},
+		{
+			NewErrors(errors.New("foo"), errors.New("bar")),
+			errors.New("baz"),
+			3,
+		},
+	}
+	for _, test := range tests {
+		test.errs.Append(test.err)
+		assert.Equal(t, test.cnt, test.errs.Len())
+	}
+}
+
 func TestErrorsPop(t *testing.T) {
 	tests := []struct {
 		errs *Errors

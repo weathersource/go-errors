@@ -50,6 +50,17 @@ func (e *Errors) Len() int {
 }
 
 // Pop removes and returns the last error from Errors
+func (e *Errors) Append(err error) {
+	if err == nil {
+		return
+	}
+	es := *e
+	es = append(es, err)
+	*e = es
+	return
+}
+
+// Pop removes and returns the last error from Errors
 func (e *Errors) Pop() error {
 	if e.Len() > 0 {
 		es := *e
