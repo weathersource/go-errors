@@ -39,7 +39,7 @@ type ResourceExhaustedError struct {
 func NewResourceExhaustedError(Message string, cause ...error) *ResourceExhaustedError {
 	var c error
 	if len(cause) > 0 {
-		c = Errors(cause)
+		c = NewErrors(cause...)
 	}
 	return &ResourceExhaustedError{
 		Code:    429,

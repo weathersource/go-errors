@@ -29,7 +29,7 @@ type InvalidArgumentError struct {
 func NewInvalidArgumentError(Message string, cause ...error) *InvalidArgumentError {
 	var c error
 	if len(cause) > 0 {
-		c = Errors(cause)
+		c = NewErrors(cause...)
 	}
 	return &InvalidArgumentError{
 		Code:    400,

@@ -27,7 +27,7 @@ type UnauthenticatedError struct {
 func NewUnauthenticatedError(Message string, cause ...error) *UnauthenticatedError {
 	var c error
 	if len(cause) > 0 {
-		c = Errors(cause)
+		c = NewErrors(cause...)
 	}
 	return &UnauthenticatedError{
 		Code:    401,

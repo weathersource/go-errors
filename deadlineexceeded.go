@@ -36,7 +36,7 @@ type DeadlineExceededError struct {
 func NewDeadlineExceededError(Message string, cause ...error) *DeadlineExceededError {
 	var c error
 	if len(cause) > 0 {
-		c = Errors(cause)
+		c = NewErrors(cause...)
 	}
 	return &DeadlineExceededError{
 		Code:       504,

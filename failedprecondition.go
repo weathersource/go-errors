@@ -39,7 +39,7 @@ type FailedPreconditionError struct {
 func NewFailedPreconditionError(Message string, cause ...error) *FailedPreconditionError {
 	var c error
 	if len(cause) > 0 {
-		c = Errors(cause)
+		c = NewErrors(cause...)
 	}
 	return &FailedPreconditionError{
 		Code:    400,

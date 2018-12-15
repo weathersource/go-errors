@@ -46,7 +46,7 @@ type UnavailableError struct {
 func NewUnavailableError(Message string, cause ...error) *UnavailableError {
 	var c error
 	if len(cause) > 0 {
-		c = Errors(cause)
+		c = NewErrors(cause...)
 	}
 	return &UnavailableError{
 		Code:       503,

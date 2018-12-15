@@ -42,7 +42,7 @@ type InternalError struct {
 func NewInternalError(Message string, cause ...error) *InternalError {
 	var c error
 	if len(cause) > 0 {
-		c = Errors(cause)
+		c = NewErrors(cause...)
 	}
 	return &InternalError{
 		Code:       500,

@@ -27,7 +27,7 @@ type NotImplementedError struct {
 func NewNotImplementedError(Message string, cause ...error) *NotImplementedError {
 	var c error
 	if len(cause) > 0 {
-		c = Errors(cause)
+		c = NewErrors(cause...)
 	}
 	return &NotImplementedError{
 		Code:    501,

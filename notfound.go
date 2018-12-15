@@ -27,7 +27,7 @@ type NotFoundError struct {
 func NewNotFoundError(Message string, cause ...error) *NotFoundError {
 	var c error
 	if len(cause) > 0 {
-		c = Errors(cause)
+		c = NewErrors(cause...)
 	}
 	return &NotFoundError{
 		Code:    404,

@@ -40,7 +40,7 @@ type OutOfRangeError struct {
 func NewOutOfRangeError(Message string, cause ...error) *OutOfRangeError {
 	var c error
 	if len(cause) > 0 {
-		c = Errors(cause)
+		c = NewErrors(cause...)
 	}
 	return &OutOfRangeError{
 		Code:    400,

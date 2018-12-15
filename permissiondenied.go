@@ -30,7 +30,7 @@ type PermissionDeniedError struct {
 func NewPermissionDeniedError(Message string, cause ...error) *PermissionDeniedError {
 	var c error
 	if len(cause) > 0 {
-		c = Errors(cause)
+		c = NewErrors(cause...)
 	}
 	return &PermissionDeniedError{
 		Code:    403,

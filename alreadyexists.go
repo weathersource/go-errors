@@ -27,7 +27,7 @@ type AlreadyExistsError struct {
 func NewAlreadyExistsError(Message string, cause ...error) *AlreadyExistsError {
 	var c error
 	if len(cause) > 0 {
-		c = Errors(cause)
+		c = NewErrors(cause...)
 	}
 	return &AlreadyExistsError{
 		Code:    409,

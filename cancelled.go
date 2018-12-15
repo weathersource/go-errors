@@ -28,7 +28,7 @@ type CancelledError struct {
 func NewCancelledError(Message string, cause ...error) *CancelledError {
 	var c error
 	if len(cause) > 0 {
-		c = Errors(cause)
+		c = NewErrors(cause...)
 	}
 	return &CancelledError{
 		Code:       499,

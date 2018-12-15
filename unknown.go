@@ -42,7 +42,7 @@ type UnknownError struct {
 func NewUnknownError(Message string, cause ...error) *UnknownError {
 	var c error
 	if len(cause) > 0 {
-		c = Errors(cause)
+		c = NewErrors(cause...)
 	}
 	return &UnknownError{
 		Code:       500,
