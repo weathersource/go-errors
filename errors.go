@@ -18,15 +18,14 @@ func NewErrors(errs ...error) *Errors {
 }
 
 // Error implements the error interface
-func (e *Errors) Error() string {
-	lenE := len(*e)
-	if lenE <= 0 {
+func (e Errors) Error() string {
+	if len(e) <= 0 {
 		return ""
-	} else if lenE == 1 {
-		return (*e)[0].Error()
+	} else if len(e) == 1 {
+		return e[0].Error()
 	}
-	logWithNumber := make([]string, lenE)
-	for i, l := range *e {
+	logWithNumber := make([]string, len(e))
+	for i, l := range e {
 		if l != nil {
 			logWithNumber[i] = fmt.Sprintf("#%d: %s", i+1, l.Error())
 		}
