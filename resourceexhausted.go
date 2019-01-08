@@ -57,7 +57,7 @@ func (e *ResourceExhaustedError) Error() string { return errorStr(e) }
 func (e *ResourceExhaustedError) Timeout() bool { return false }
 
 // Temporary indicates if this error is potentially recoverable.
-func (e *ResourceExhaustedError) Temporary() bool { return true }
+func (e *ResourceExhaustedError) Temporary() bool { return false }
 
 // GetCode returns the HTTP status code associated with this error.
 func (e *ResourceExhaustedError) GetCode() int { return e.Code }
