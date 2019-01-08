@@ -29,7 +29,7 @@ var ResourceExhaustedErrorTests = []ResourceExhaustedErrorTest{
 	{
 		err:        NewResourceExhaustedError("Message 1"),
 		timeout:    false,
-		temporary:  true,
+		temporary:  false,
 		errorInfo:  "error 429: RESOURCE EXHAUSTED. Message 1",
 		getCode:    429,
 		getMessage: "RESOURCE EXHAUSTED. Message 1",
@@ -41,7 +41,7 @@ var ResourceExhaustedErrorTests = []ResourceExhaustedErrorTest{
 	{
 		err:        NewResourceExhaustedError("Message 2", errors.New("causal error")),
 		timeout:    false,
-		temporary:  true,
+		temporary:  false,
 		errorInfo:  "error 429: RESOURCE EXHAUSTED. Message 2",
 		getCode:    429,
 		getMessage: "RESOURCE EXHAUSTED. Message 2",
@@ -53,7 +53,7 @@ var ResourceExhaustedErrorTests = []ResourceExhaustedErrorTest{
 	{
 		err:        NewResourceExhaustedError("Message 2", errors.New("causal error"), errors.New("causal error 2")),
 		timeout:    false,
-		temporary:  true,
+		temporary:  false,
 		errorInfo:  "error 429: RESOURCE EXHAUSTED. Message 2",
 		getCode:    429,
 		getMessage: "RESOURCE EXHAUSTED. Message 2",
