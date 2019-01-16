@@ -1,4 +1,4 @@
-# errors
+# go-errors
 
 [![GoDoc](https://godoc.org/github.com/weathersource/go-errors?status.svg)](https://godoc.org/github.com/weathersource/go-errors)
 [![Go Report Card](https://goreportcard.com/badge/github.com/weathersource/go-errors)](https://goreportcard.com/report/github.com/weathersource/go-errors)
