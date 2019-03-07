@@ -53,13 +53,18 @@ func (e *Errors) Len() int {
 }
 
 // Pop removes and returns the last error from Errors
-func (e *Errors) Append(err error) {
-	if err == nil {
+func (e *Errors) Append(errs ...error) {
+	if len(errs) == 0 {
 		return
 	}
-	e.Lock()
-	defer e.Unlock()
-	e.errs = append(e.errs, err)
+	for _, err := range errs {
+		if err == nil {
+			continue
+		}
+		e.Lock()
+		e.errs = append(e.errs, err)
+		e.Unlock()
+	}
 	return
 }
 
