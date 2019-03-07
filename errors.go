@@ -3,29 +3,33 @@ package errors
 import (
 	"fmt"
 	"strings"
+	"sync"
 
 	codes "google.golang.org/grpc/codes"
 	status "google.golang.org/grpc/status"
 )
 
 // Errors is a container for multiple errors and implements the error interface
-type Errors []error
+type Errors struct {
+	sync.RWMutex
+	errs []error
+}
 
 // NewErrors returns an error that consists of multiple errors.
 func NewErrors(errs ...error) *Errors {
-	es := Errors(errs)
+	es := Errors{errs: errs}
 	return &es
 }
 
 // Error implements the error interface
 func (e Errors) Error() string {
-	if len(e) <= 0 {
+	if len(e.errs) <= 0 {
 		return ""
-	} else if len(e) == 1 {
-		return e[0].Error()
+	} else if len(e.errs) == 1 {
+		return e.errs[0].Error()
 	}
-	logWithNumber := make([]string, len(e))
-	for i, l := range e {
+	logWithNumber := make([]string, len(e.errs))
+	for i, l := range e.errs {
 		if l != nil {
 			logWithNumber[i] = fmt.Sprintf("#%d: %s", i+1, l.Error())
 		}
@@ -39,13 +43,13 @@ func (e *Errors) Len() int {
 	if e == nil {
 		return 0
 	}
-	if len(*e) == 1 {
+	if len(e.errs) == 1 {
 		err := e.peek()
 		if err == nil {
 			return 0
 		}
 	}
-	return len(*e)
+	return len(e.errs)
 }
 
 // Pop removes and returns the last error from Errors
@@ -53,19 +57,19 @@ func (e *Errors) Append(err error) {
 	if err == nil {
 		return
 	}
-	es := *e
-	es = append(es, err)
-	*e = es
+	e.Lock()
+	defer e.Unlock()
+	e.errs = append(e.errs, err)
 	return
 }
 
 // Pop removes and returns the last error from Errors
 func (e *Errors) Pop() error {
+	e.Lock()
+	defer e.Unlock()
 	if e.Len() > 0 {
-		es := *e
-		err := (es)[len(es)-1]
-		es = (es)[:len(es)-1]
-		*e = es
+		err := (e.errs)[len(e.errs)-1]
+		e.errs = (e.errs)[:len(e.errs)-1]
 		return err
 	}
 	return nil
@@ -73,11 +77,11 @@ func (e *Errors) Pop() error {
 
 // Shift removes and returns the first error from Errors
 func (e *Errors) Shift() error {
+	e.Lock()
+	defer e.Unlock()
 	if e.Len() > 0 {
-		es := *e
-		err := (es)[0]
-		es = (es)[1:]
-		*e = es
+		err := (e.errs)[0]
+		e.errs = (e.errs)[1:]
 		return err
 	}
 	return nil
@@ -85,8 +89,8 @@ func (e *Errors) Shift() error {
 
 // Timeout indicates if this error is the result of a timeout.
 func (e *Errors) Timeout() bool {
-	if e.Len() == 1 {
-		err := e.peek()
+	err := e.peekLocked()
+	if err != nil {
 		wxErr, ok := err.(interface{ Timeout() bool })
 		if ok {
 			return wxErr.Timeout()
@@ -97,8 +101,8 @@ func (e *Errors) Timeout() bool {
 
 // Temporary indicates if this error is potentially recoverable.
 func (e *Errors) Temporary() bool {
-	if e.Len() == 1 {
-		err := e.peek()
+	err := e.peekLocked()
+	if err != nil {
 		wxErr, ok := err.(interface{ Temporary() bool })
 		if ok {
 			return wxErr.Temporary()
@@ -110,7 +114,13 @@ func (e *Errors) Temporary() bool {
 // GetCode returns the HTTP status code associated with this error.
 func (e *Errors) GetCode() int {
 
-	if e == nil || e.Len() == 0 {
+	if e == nil {
+		return 200
+	}
+
+	e.RLock()
+	defer e.RUnlock()
+	if e.Len() == 0 {
 		return 200
 	} else if e.Len() == 1 {
 
@@ -166,7 +176,14 @@ func (e *Errors) GetCode() int {
 
 // GetMessage returns the message associated with this error.
 func (e *Errors) GetMessage() string {
-	if e == nil || e.Len() == 0 {
+
+	if e == nil {
+		return ""
+	}
+
+	e.RLock()
+	defer e.RUnlock()
+	if e.Len() == 0 {
 		return ""
 	} else if e.Len() == 1 {
 		err := e.peek()
@@ -181,7 +198,14 @@ func (e *Errors) GetMessage() string {
 
 // GetCause returns any causal errors associated with this error.
 func (e *Errors) GetCause() error {
-	if e == nil || e.Len() == 0 {
+
+	if e == nil {
+		return nil
+	}
+
+	e.RLock()
+	defer e.RUnlock()
+	if e.Len() == 0 {
 		return nil
 	} else if e.Len() == 1 {
 		err := e.peek()
@@ -196,7 +220,15 @@ func (e *Errors) GetCause() error {
 
 // GetStack returns the trace stack associated with this error.
 func (e *Errors) GetStack() stack {
+
 	var s stack
+
+	if e == nil {
+		return s
+	}
+
+	e.RLock()
+	defer e.RUnlock()
 	if e.Len() == 1 {
 		err := e.peek()
 		wxErr, ok := err.(interface{ GetStack() stack })
@@ -209,7 +241,14 @@ func (e *Errors) GetStack() stack {
 
 // GRPCStatus implements an interface required to return proper GRPC status codes
 func (e *Errors) GRPCStatus() *status.Status {
-	if e == nil || e.Len() == 0 {
+
+	if e == nil {
+		return nil
+	}
+
+	e.RLock()
+	defer e.RUnlock()
+	if e.Len() == 0 {
 		return nil
 	} else if e.Len() == 1 {
 		err := e.peek()
@@ -223,8 +262,18 @@ func (e *Errors) GRPCStatus() *status.Status {
 
 // peek returns the first error in e, but leaves it in the slice
 func (e *Errors) peek() error {
-	if len(*e) > 0 {
-		return (*e)[0]
+	if e == nil {
+		return nil
+	}
+	if len(e.errs) > 0 {
+		return e.errs[0]
 	}
 	return nil
+}
+
+// peek returns the first error in e, but leaves it in the slice with a read lock.
+func (e *Errors) peekLocked() error {
+	e.RLock()
+	defer e.RUnlock()
+	return e.peek()
 }
