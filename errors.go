@@ -68,6 +68,15 @@ func (e *Errors) Append(errs ...error) {
 	return
 }
 
+// Merge adds in to e
+func (e *Errors) Merge(in *Errors) {
+	if in == nil {
+		return
+	}
+	e.Append(in.errs...)
+	return
+}
+
 // Pop removes and returns the last error from Errors
 func (e *Errors) Pop() error {
 	e.Lock()

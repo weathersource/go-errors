@@ -98,6 +98,34 @@ func TestErrorsAppend(t *testing.T) {
 	}
 }
 
+func TestErrorsMerge(t *testing.T) {
+	tests := []struct {
+		errs  *Errors
+		errs2 *Errors
+		cnt   int
+	}{
+		{
+			NewErrors(),
+			nil,
+			0,
+		},
+		{
+			NewErrors(errors.New("foo")),
+			NewErrors(errors.New("bar"), nil),
+			2,
+		},
+		{
+			NewErrors(errors.New("foo"), errors.New("bar")),
+			NewErrors(errors.New("baz"), errors.New("bat")),
+			4,
+		},
+	}
+	for _, test := range tests {
+		test.errs.Merge(test.errs2)
+		assert.Equal(t, test.cnt, test.errs.Len())
+	}
+}
+
 func TestErrorsPop(t *testing.T) {
 	tests := []struct {
 		errs *Errors
