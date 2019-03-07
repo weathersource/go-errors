@@ -422,7 +422,7 @@ func TestErrorsGRPCStatus(t *testing.T) {
 		assert.Nil(t, test.errs.GRPCStatus())
 	}
 }
-func TestErrorsPeek(t *testing.T) {
+func TestErrorsPeekLocked(t *testing.T) {
 	tests := []struct {
 		errs *Errors
 		err  error
@@ -441,6 +441,6 @@ func TestErrorsPeek(t *testing.T) {
 		},
 	}
 	for _, test := range tests {
-		assert.Equal(t, test.err, test.errs.peek())
+		assert.Equal(t, test.err, test.errs.peekLocked())
 	}
 }
