@@ -275,5 +275,6 @@ func (e *Errors) peek() error {
 func (e *Errors) peekLocked() error {
 	e.RLock()
 	defer e.RUnlock()
-	return e.peek()
+	err := e.peek()
+	return err
 }
