@@ -428,10 +428,6 @@ func TestErrorsPeekLocked(t *testing.T) {
 		err  error
 	}{
 		{
-			NewErrors(),
-			nil,
-		},
-		{
 			NewErrors(errors.New("foo")),
 			errors.New("foo"),
 		},
@@ -444,4 +440,9 @@ func TestErrorsPeekLocked(t *testing.T) {
 		err := test.errs.peekLocked()
 		assert.Equal(t, test.err.Error(), err.Error())
 	}
+
+	// test nil response
+	errs := NewErrors()
+	assert.Equal(t, nil, errs.peekLocked())
+
 }

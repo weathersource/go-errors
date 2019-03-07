@@ -273,6 +273,10 @@ func (e *Errors) peek() error {
 
 // peek returns the first error in e, but leaves it in the slice with a read lock.
 func (e *Errors) peekLocked() error {
+	if e == nil {
+		return nil
+	}
+
 	e.RLock()
 	defer e.RUnlock()
 	err := e.peek()
