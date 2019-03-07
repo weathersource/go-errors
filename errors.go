@@ -17,8 +17,8 @@ type Errors struct {
 
 // NewErrors returns an error that consists of multiple errors.
 func NewErrors(errs ...error) *Errors {
-	es := Errors{errs: errs}
-	return &es
+	e := Errors{errs: errs}
+	return &e
 }
 
 // Error implements the error interface

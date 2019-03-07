@@ -441,6 +441,7 @@ func TestErrorsPeekLocked(t *testing.T) {
 		},
 	}
 	for _, test := range tests {
-		assert.Equal(t, test.err, test.errs.peekLocked())
+		err := test.errs.peekLocked()
+		assert.Equal(t, test.err.Error(), err.Error())
 	}
 }
