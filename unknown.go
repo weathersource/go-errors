@@ -45,12 +45,11 @@ func NewUnknownError(Message string, cause ...error) *UnknownError {
 		c = NewErrors(cause...)
 	}
 	return &UnknownError{
-		Code:       500,
-		Message:    "UNKNOWN ERROR.",
-		logMessage: Message,
-		cause:      c,
-		stack:      getTrace(),
-		rpcCode:    codes.Unknown,
+		Code:    500,
+		Message: "UNKNOWN ERROR." + Message,
+		cause:   c,
+		stack:   getTrace(),
+		rpcCode: codes.Unknown,
 	}
 }
 
@@ -67,7 +66,7 @@ func (e *UnknownError) Temporary() bool { return true }
 func (e *UnknownError) GetCode() int { return e.Code }
 
 // GetMessage returns the message associated with this error.
-func (e *UnknownError) GetMessage() string { return e.Message + " " + e.logMessage }
+func (e *UnknownError) GetMessage() string { return e.Message }
 
 // GetCause returns any causal errors associated with this error.
 func (e *UnknownError) GetCause() error { return e.cause }
