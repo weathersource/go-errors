@@ -46,7 +46,7 @@ func NewUnknownError(Message string, cause ...error) *UnknownError {
 	}
 	return &UnknownError{
 		Code:    500,
-		Message: "UNKNOWN ERROR." + Message,
+		Message: "UNKNOWN ERROR. " + Message,
 		cause:   c,
 		stack:   getTrace(),
 		rpcCode: codes.Unknown,

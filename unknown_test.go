@@ -34,9 +34,9 @@ var UnknownErrorTests = []UnknownErrorTest{
 		getCode:    500,
 		getMessage: "UNKNOWN ERROR. foo",
 		getCause:   nil,
-		json:       []byte(`{"errorCode":500,"errorMessage":"UNKNOWN ERROR."}`),
+		json:       []byte(`{"errorCode":500,"errorMessage":"UNKNOWN ERROR. foo"}`),
 		rpcCode:    codes.Unknown,
-		rpcMessage: "UNKNOWN ERROR.",
+		rpcMessage: "UNKNOWN ERROR. foo",
 	},
 	{
 		err:        NewUnknownError("foo", errors.New("causal error")),
@@ -46,9 +46,9 @@ var UnknownErrorTests = []UnknownErrorTest{
 		getCode:    500,
 		getMessage: "UNKNOWN ERROR. foo",
 		getCause:   errors.New("causal error"),
-		json:       []byte(`{"errorCode":500,"errorMessage":"UNKNOWN ERROR."}`),
+		json:       []byte(`{"errorCode":500,"errorMessage":"UNKNOWN ERROR. foo"}`),
 		rpcCode:    codes.Unknown,
-		rpcMessage: "UNKNOWN ERROR.",
+		rpcMessage: "UNKNOWN ERROR. foo",
 	},
 	{
 		err:        NewUnknownError("foo", errors.New("causal error"), errors.New("causal error 2")),
@@ -58,9 +58,9 @@ var UnknownErrorTests = []UnknownErrorTest{
 		getCode:    500,
 		getMessage: "UNKNOWN ERROR. foo",
 		getCause:   NewErrors(errors.New("causal error"), errors.New("causal error 2")),
-		json:       []byte(`{"errorCode":500,"errorMessage":"UNKNOWN ERROR."}`),
+		json:       []byte(`{"errorCode":500,"errorMessage":"UNKNOWN ERROR. foo"}`),
 		rpcCode:    codes.Unknown,
-		rpcMessage: "UNKNOWN ERROR.",
+		rpcMessage: "UNKNOWN ERROR. foo",
 	},
 }
 
