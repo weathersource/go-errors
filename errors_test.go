@@ -196,7 +196,7 @@ func TestErrorsTimeout(t *testing.T) {
 		timeout bool
 	}{
 		{
-			NewErrors(NewCancelledError("foo")),
+			NewErrors(NewCanceledError("foo")),
 			true,
 		},
 		{
