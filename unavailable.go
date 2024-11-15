@@ -83,3 +83,18 @@ func (e *UnavailableError) GetStack() stack { return e.stack }
 func (e *UnavailableError) GRPCStatus() *status.Status {
 	return status.New(e.rpcCode, e.Message)
 }
+
+// appends additional error causes to this error
+func (e *UnavailableError) Append(errs ...error) *UnavailableError {
+
+	if e.cause == nil {
+		e.cause = NewErrors(errs...)
+	} else {
+		c, ok := e.cause.(*Errors)
+		if ok {
+			c.Append(errs...)
+			e.cause = c
+		}
+	}
+	return e
+}
