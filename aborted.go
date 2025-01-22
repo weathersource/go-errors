@@ -76,18 +76,3 @@ func (e *AbortedError) GetStack() stack { return e.stack }
 func (e *AbortedError) GRPCStatus() *status.Status {
 	return status.New(e.rpcCode, e.Message)
 }
-
-// appends additional error causes to this error
-func (e *AbortedError) Append(errs ...error) *AbortedError {
-
-	if e.cause == nil {
-		e.cause = NewErrors(errs...)
-	} else {
-		c, ok := e.cause.(*Errors)
-		if ok {
-			c.Append(errs...)
-			e.cause = c
-		}
-	}
-	return e
-}

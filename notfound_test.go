@@ -127,16 +127,3 @@ func TestNotFoundErrorGrpc(t *testing.T) {
 		assert.Equal(t, test.rpcMessage, s.Message())
 	}
 }
-
-func TestNotFoundErrorAppend(t *testing.T) {
-
-	e1       := NewNotFoundError("Message 1")
-	e1append := e1.Append(errors.New("foo"))
-	e1alt    := NewNotFoundError("Message 1", errors.New("foo"))
-	assert.Equal(t, e1alt.GetCause().Error(), e1append.GetCause().Error())
-
-	e2       :=NewNotFoundError("Message 2", errors.New("foo"))
-	e2append := e2.Append(errors.New("bar"))
-	e2alt    := NewNotFoundError("Message 2", errors.New("foo"), errors.New("bar"))
-	assert.Equal(t, e2alt.GetCause().Error(), e2append.GetCause().Error())
-}
