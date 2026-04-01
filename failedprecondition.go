@@ -10,15 +10,15 @@ import (
 // For example, directory to be deleted may be non-empty, an rmdir
 // operation is applied to a non-directory, etc.
 //
-// Service implementorse should use FailedPreconditionError if the client
-// should not retry until the system state has been explicitly fixed
-// (E.g., if an "rmdir" fails because the directory is non-empty,
-// FailedPreconditionError should be returned since the client should not
-// retry unless they have first fixed up the directory by deleting files from
-// it). If the client performs conditional REST Get/Update/Delete on a resource
-// and the resource on the server does not match the condition,
-// FailedPreconditionError should be used (e.g., conflicting read-modify-write
-// on the same resource).
+// Service implementors can use the following guidelines to decide between
+// FAILED_PRECONDITION, ABORTED, and UNAVAILABLE: (a) Use UNAVAILABLE if the
+// client can retry just the failing call. (b) Use ABORTED if the client
+// should retry at a higher level (e.g., when a client-specified test-and-set
+// fails, indicating the client should restart a read-modify-write sequence).
+// (c) Use FAILED_PRECONDITION if the client should not retry until the
+// system state has been explicitly fixed. E.g., if an "rmdir" fails because
+// the directory is non-empty, FAILED_PRECONDITION should be returned since
+// the client should not retry unless the files are deleted from the directory.
 //
 // Example error Message:
 //

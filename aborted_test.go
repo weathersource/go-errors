@@ -11,6 +11,7 @@ import (
 
 type AbortedErrorTest struct {
 	err          *AbortedError
+	appendErr    *AbortedError
 	timeout      bool
 	temporary    bool
 	errorInfo    string
@@ -51,16 +52,16 @@ var AbortedErrorTests = []AbortedErrorTest{
 		rpcMessage: "ABORTED. Message 2",
 	},
 	{
-		err:        NewAbortedError("Message 2", errors.New("causal error"), errors.New("causal error 2")),
+		err:        NewAbortedError("Message 3", errors.New("causal error"), errors.New("causal error 2")),
 		timeout:    false,
 		temporary:  false,
-		errorInfo:  "error 409: ABORTED. Message 2",
+		errorInfo:  "error 409: ABORTED. Message 3",
 		getCode:    409,
-		getMessage: "ABORTED. Message 2",
+		getMessage: "ABORTED. Message 3",
 		getCause:   NewErrors(errors.New("causal error"), errors.New("causal error 2")),
-		json:       []byte(`{"errorCode":409,"errorMessage":"ABORTED. Message 2"}`),
+		json:       []byte(`{"errorCode":409,"errorMessage":"ABORTED. Message 3"}`),
 		rpcCode:    codes.Aborted,
-		rpcMessage: "ABORTED. Message 2",
+		rpcMessage: "ABORTED. Message 3",
 	},
 }
 
